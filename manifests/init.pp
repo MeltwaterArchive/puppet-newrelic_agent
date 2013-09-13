@@ -82,11 +82,12 @@ class newrelic_agent (
     file { $sysmond_cfg:
       ensure  => 'present',
       content => template("${module_name}/nrsysmond.cfg.erb"),
+      require => Package[$sysmond_pkg],
     }
     service { $sysmond_svc:
       ensure    => $sysmond_svc_ensure,
       enable    => $sysmond_svc_enable,
-      require   => File[$sysmond_cfg],
+      require   => [File[$sysmond_cfg], Package[$sysmond_pkg]],
       subscribe => File[$sysmond_cfg],
     }
   }
