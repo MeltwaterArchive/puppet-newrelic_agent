@@ -108,6 +108,7 @@ class newrelic_agent (
         ensure   => 'present',
         provider => 'rpm',
         source   => $newrelic_agent::params::newrelic_repo_src,
+        before   => Package[$sysmond_pkg],
       }
     }
     default : {}
