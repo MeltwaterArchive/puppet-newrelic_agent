@@ -78,43 +78,45 @@
 #  }
 #
 class newrelic_agent::php (
-  $php_agent_pkg_ensure = $newrelic_agent::params::php_agent_pkg_ensure,
-  $php_agent_appname = $newrelic_agent::params::php_agent_appname,
-  $php_agent_browser_mon_auto_inst = $newrelic_agent::params::php_agent_browser_mon_auto_inst,
-  $php_agent_capture_params = $newrelic_agent::params::php_agent_capture_params,
-  $php_agent_enable = $newrelic_agent::params::php_agent_enable,
-  $php_agent_error_collector_enable = $newrelic_agent::params::php_agent_error_collector_enable,
-  $php_agent_error_collector_record_database_errors = $newrelic_agent::params::php_agent_error_collector_record_database_errors,
-  $php_agent_error_collector_pri_api = $newrelic_agent::params::php_agent_error_collector_pri_api,
-  $php_agent_framework = $newrelic_agent::params::php_agent_framework,
-  $php_agent_ignored_params = $newrelic_agent::params::php_agent_ignored_params,
-  $php_agent_logfile = $newrelic_agent::params::php_agent_logfile,
-  $php_agent_loglevel = $newrelic_agent::params::php_agent_loglevel,
-  $php_agent_transaction_tracer_enable = $newrelic_agent::params::php_agent_transaction_tracer_enable,
-  $php_agent_transaction_tracer_threshold = $newrelic_agent::params::php_agent_transaction_tracer_threshold,
-  $php_agent_transaction_tracer_detail = $newrelic_agent::params::php_agent_transaction_tracer_detail,
-  $php_agent_transaction_tracer_slow_sql = $newrelic_agent::params::php_agent_transaction_tracer_slow_sql,
-  $php_agent_transaction_tracer_stack_trace_threshold = $newrelic_agent::params::php_agent_transaction_tracer_stack_trace_threshold,
-  $php_agent_transaction_tracer_explain_enabled = $newrelic_agent::params::php_agent_transaction_tracer_explain_enabled,
-  $php_agent_transaction_tracer_explain_threshold = $newrelic_agent::params::php_agent_transaction_tracer_explain_threshold,
-  $php_agent_transaction_tracer_record_sql = $newrelic_agent::params::php_agent_transaction_tracer_record_sql,
-  $php_agent_transaction_tracer_custom = $newrelic_agent::params::php_agent_transaction_tracer_custom,
-  $php_agent_webtransaction_name_remove_trailing_path = $newrelic_agent::params::php_agent_webtransaction_name_remove_trailing_path,
-  $php_agent_webtransaction_name_functions = $newrelic_agent::params::php_agent_webtransaction_name_functions,
-  $php_agent_webtransaction_name_files = $newrelic_agent::params::php_agent_webtransaction_name_files,
-  $php_daemon_agent_startup = $newrelic_agent::params::php_daemon_agent_startup,
-  $php_daemon_auditlog = $newrelic_agent::params::php_daemon_auditlog,
-  $php_daemon_collector_host = $newrelic_agent::params::php_daemon_collector_host,
-  $php_daemon_location = $newrelic_agent::params::php_daemon_location,
-  $php_daemon_logfile = $newrelic_agent::params::php_daemon_logfile,
-  $php_daemon_loglevel = $newrelic_agent::params::php_daemon_loglevel,
-  $php_daemon_max_threads = $newrelic_agent::params::php_daemon_max_threads,
-  $php_daemon_pidfile = $newrelic_agent::params::php_daemon_pidfile,
-  $php_daemon_port = $newrelic_agent::params::php_daemon_port,
-  $php_daemon_proxy = $newrelic_agent::params::php_daemon_proxy,
-  $php_daemon_ssl = $newrelic_agent::params::php_daemon_ssl,
-  $php_daemon_svc_enable = $newrelic_agent::params::php_daemon_svc_enable,
   $notify_service = undef,
+  #PHP Agent Parameters
+  $php_agent_pkg_ensure = 'present',
+  $php_agent_appname = 'PHP Application',
+  $php_agent_browser_mon_auto_inst = true,
+  $php_agent_capture_params = false,
+  $php_agent_enable = true,
+  $php_agent_error_collector_enable = true,
+  $php_agent_error_collector_record_database_errors = false,
+  $php_agent_error_collector_pri_api = false,
+  $php_agent_framework = '',
+  $php_agent_ignored_params = undef,
+  $php_agent_logfile = '/var/log/newrelic/php_agent.log',
+  $php_agent_loglevel = 'info',
+  $php_agent_transaction_tracer_enable = true,
+  $php_agent_transaction_tracer_threshold = 'apdex_f',
+  $php_agent_transaction_tracer_detail = 1,
+  $php_agent_transaction_tracer_slow_sql = true,
+  $php_agent_transaction_tracer_stack_trace_threshold = '500',
+  $php_agent_transaction_tracer_explain_enabled = true,
+  $php_agent_transaction_tracer_explain_threshold = '500',
+  $php_agent_transaction_tracer_record_sql = 'obfuscated',
+  $php_agent_transaction_tracer_custom = undef,
+  $php_agent_webtransaction_name_remove_trailing_path = false,
+  $php_agent_webtransaction_name_functions = undef,
+  $php_agent_webtransaction_name_files = undef,
+  #PHP daemon parameters
+  $php_daemon_agent_startup = true,
+  $php_daemon_auditlog = undef,
+  $php_daemon_collector_host = 'collector.newrelic.com',
+  $php_daemon_location = '/usr/bin/newrelic-daemon',
+  $php_daemon_logfile = '/var/log/newrelic/newrelic-daemon.log',
+  $php_daemon_loglevel = 'info',
+  $php_daemon_max_threads = '8',
+  $php_daemon_pidfile = '/var/run/newrelic-daemon.pid',
+  $php_daemon_port = '/tmp/.newrelic.sock',
+  $php_daemon_proxy = undef,
+  $php_daemon_ssl = true,
+  $php_daemon_svc_enable = true,
   ) {
   if ! defined(Class['newrelic_agent']) {
     fail('You must include the newrelic_agent base class before adding any other monitoring agents')
@@ -123,8 +125,18 @@ class newrelic_agent::php (
   #Get license key from main class
   $newrelic_license_key = $::newrelic_agent::newrelic_license_key
 
-  $php_agent_pkg = $newrelic_agent::params::php_agent_pkg
-  $php_agent_conf_dir = $newrelic_agent::params::php_agent_conf_dir
+  $php_agent_pkg = 'newrelic-php5'
+  $php_daemon_svc = 'newrelic-daemon'
+
+  case $::osfamily {
+    'RedHat' : {
+      #PHP Agent Parameters
+      $php_agent_conf_dir = '/etc/php.d'
+    }
+    default : {
+      fail ("Unsupported osfamily: ${::osfamily} for module: ${module_name}")
+    }
+  }
 
   package { $php_agent_pkg:
     ensure => $php_agent_pkg_ensure,
@@ -150,8 +162,6 @@ class newrelic_agent::php (
         before    => File["${php_agent_conf_dir}/newrelic.ini"],
       }
     } else {
-      $php_daemon_svc = $newrelic_agent::params::php_daemon_svc
-
       if $php_daemon_svc_enable {
         $php_daemon_svc_ensure = 'running'
       } else {

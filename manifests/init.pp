@@ -79,39 +79,45 @@
 # Licensed under Apache License, Version 2.0
 #
 class newrelic_agent (
-  $newrelic_license_key = undef,
-  $sysmond_pkg = $newrelic_agent::params::sysmond_pkg,
-  $sysmond_pkg_ensure = $newrelic_agent::params::sysmond_pkg_ensure,
-  $sysmond_svc_enable = $newrelic_agent::params::sysmond_svc_enable,
-  $sysmond_loglevel = $newrelic_agent::params::sysmond_loglevel,
-  $sysmond_logfile = $newrelic_agent::params::sysmond_logfile,
-  $sysmond_pidfile = $newrelic_agent::params::sysmond_pidfile,
-  $sysmond_collector_host = $newrelic_agent::params::sysmond_collector_host,
-  $sysmond_timeout = $newrelic_agent::params::sysmond_timeout,
+  $newrelic_license_key,
+  $sysmond_pkg = 'newrelic-sysmond',
+  $sysmond_pkg_ensure = 'present',
+  $sysmond_collector_host = 'collector.newrelic.com',
+  $sysmond_logfile = '/var/log/newrelic/nrsysmond.log',
+  $sysmond_loglevel = 'info',
+  $sysmond_pidfile = '/var/run/newrelic/nrsysmond.pid',
   $sysmond_proxy = undef,
-  $sysmond_ssl_enable = $newrelic_agent::params::sysmond_ssl_enable,
+  $sysmond_ssl_enable = false,
+  $sysmond_svc_enable = true,
   $sysmond_ssl_ca_bundle = undef,
   $sysmond_ssl_ca_path = undef,
-) inherits newrelic_agent::params {
+  $sysmond_timeout = '30',
+) {
   validate_string($newrelic_license_key)
   validate_string($sysmond_pkg)
   validate_string($sysmond_pkg_ensure)
   validate_bool($sysmond_svc_enable)
 
-  $sysmond_svc = $newrelic_agent::params::sysmond_svc
-  $sysmond_cfg = $newrelic_agent::params::sysmond_cfg
+  $sysmond_svc = 'newrelic-sysmond'
+  $sysmond_cfg = '/etc/newrelic/nrsysmond.cfg'
 
   #Install the Newrelic repo
   case $::osfamily {
     'RedHat' : {
-      package { $newrelic_agent::params::newrelic_repo_pkg :
+      #Repo configuration
+      $newrelic_repo_pkg = 'newrelic-repo-5-3.noarch'
+      $newrelic_repo_src = "https://yum.newrelic.com/pub/newrelic/el5/x86_64/${newrelic_repo_pkg}.rpm"
+
+      package { $newrelic_repo_pkg :
         ensure   => 'present',
         provider => 'rpm',
-        source   => $newrelic_agent::params::newrelic_repo_src,
+        source   => $newrelic_repo_src,
         before   => Package[$sysmond_pkg],
       }
     }
-    default : {}
+    default : {
+      fail ("Unsupported osfamily: ${::osfamily} for module: ${module_name}")
+    }
   }
 
   #Manage the sysmond package and service
