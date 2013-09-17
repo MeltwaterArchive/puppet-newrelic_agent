@@ -170,6 +170,9 @@ class newrelic_agent::php (
 
       file {'/etc/newrelic/newrelic.cfg':
         ensure  => present,
+        owner   => 'root',
+        group   => 'root',
+        mode    => '0644',
         content => template("${module_name}/newrelic.cfg.erb"),
         require => Exec['newrelic-install'],
       }
@@ -184,7 +187,10 @@ class newrelic_agent::php (
     }
 
     file { "${php_agent_conf_dir}/newrelic.ini":
-      ensure  => present,
+      ensure  => 'present',
+      owner   => 'root',
+      group   => 'root',
+      mode    => '0644',
       content => template("${module_name}/newrelic.ini.erb"),
       require => Exec['newrelic-install'],
     }

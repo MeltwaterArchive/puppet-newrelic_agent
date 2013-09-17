@@ -134,6 +134,9 @@ class newrelic_agent (
   if $sysmond_pkg_ensure != 'absent' {
     file { $sysmond_cfg:
       ensure  => 'present',
+      owner   => 'root',
+      group   => 'newrelic',
+      mode    => '0640',
       content => template("${module_name}/nrsysmond.cfg.erb"),
       require => Package[$sysmond_pkg],
     }
