@@ -46,44 +46,33 @@ class newrelic_agent::ruby (
   $install_gem = true,
   $notify_service = undef,
   #Ruby agent parameters
-  $ruby_agent_enabled = 'auto',
-  $ruby_agent_app_name = 'Ruby Application',
-  $ruby_agent_audit_log_enable = false,
-  $ruby_agent_browser_mon_auto_inst = true,
-  $ruby_agent_capture_params = false,
-  $ruby_agent_developer_mode = false,
-  $ruby_agent_error_collector_enable = true,
-  $ruby_agent_error_collector_capture_source = true,
-  $ruby_agent_error_collector_ignore_errors = 'ActionController::RoutingError,Sinatra::NotFound',
-  $ruby_agent_error_collector_capture_memcache_keys = false,
-  $ruby_agent_log_level = 'info',
-  $ruby_agent_logfile_name = 'newrelic_agent.log',
-  $ruby_agent_logfile_path = '/var/log',
-  $ruby_agent_monitor_mode = true,
-  $ruby_agent_proxy_host = undef,
-  $ruby_agent_proxy_port = undef,
-  $ruby_agent_proxy_user = undef,
-  $ruby_agent_proxy_pass = undef,
-  $ruby_agent_ssl_enable = true,
-  $ruby_agent_trans_tracer_enable = true,
-  $ruby_agent_trans_tracer_trans_threshold = 'apdex_f',
-  $ruby_agent_trans_tracer_record_sql = 'obfuscated',
-  $ruby_agent_trans_tracer_stack_trace_threshold = '0.500',
-  $ruby_agent_trans_tracer_explain_enabled = true,
-  $ruby_agent_trans_tracer_explain_threshold = '0.5',
+  $agent_enabled = 'auto',
+  $agent_app_name = 'Ruby Application',
+  $agent_audit_log_enable = false,
+  $agent_browser_mon_auto_inst = true,
+  $agent_capture_params = false,
+  $agent_developer_mode = false,
+  $agent_error_collector_enable = true,
+  $agent_error_collector_capture_source = true,
+  $agent_error_collector_ignore_errors = 'ActionController::RoutingError,Sinatra::NotFound',
+  $agent_error_collector_capture_memcache_keys = false,
+  $agent_log_level = 'info',
+  $agent_logfile_name = 'newrelic_agent.log',
+  $agent_logfile_path = '/var/log',
+  $agent_monitor_mode = true,
+  $agent_proxy_host = undef,
+  $agent_proxy_port = undef,
+  $agent_proxy_user = undef,
+  $agent_proxy_pass = undef,
+  $agent_ssl_enable = true,
+  $agent_trans_tracer_enable = true,
+  $agent_trans_tracer_trans_threshold = 'apdex_f',
+  $agent_trans_tracer_record_sql = 'obfuscated',
+  $agent_trans_tracer_stack_trace_threshold = '0.500',
+  $agent_trans_tracer_explain_enabled = true,
+  $agent_trans_tracer_explain_threshold = '0.5',
   #Environment Hash
-  $ruby_agent_environment_hash = {
-    'development' => {
-      'monitor_mode'   => false,
-      'developer_mode' => true,
-    },
-    'test'        => { 'monitor_mode' => false,},
-    'production'  => { 'monitor_mode' => true,},
-    'staging'     => {
-      'monitor_mode' => true,
-      'app_name'     => 'Ruby Application (Staging)',
-    },
-  },
+  $agent_environment_hash = 'UNSET',
 ) {
   if ! defined(Class['newrelic_agent']) {
     fail('You must include the newrelic_agent base class before adding any other monitoring agents')
@@ -93,6 +82,24 @@ class newrelic_agent::ruby (
 
   #Get license key from main class
   $newrelic_license_key = $::newrelic_agent::newrelic_license_key
+
+  if $agent_environment_hash == 'UNSET' {
+    $agent_environment_hash_real = {
+      'development' => {
+        'monitor_mode'   => false,
+        'developer_mode' => true,
+      },
+      'test'        => { 'monitor_mode' => false,},
+      'production'  => { 'monitor_mode' => true,},
+      'staging'     => {
+        'monitor_mode' => true,
+        'app_name'     => "${agent_app_name} (Staging)",
+      },
+    }
+  } else {
+    validate_hash($agent_environment_hash)
+    $agent_environment_hash_real = $agent_environment_hash
+  }
 
   if $install_gem {
     package {'newrelic_rpm':

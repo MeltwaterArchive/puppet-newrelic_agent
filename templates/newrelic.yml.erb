@@ -28,7 +28,7 @@ common: &default_settings
   # Valid values are true, false and auto.
   #
   # agent_enabled: auto
-  agent_enabled: <%= @ruby_agent_enabled %>
+  agent_enabled: <%= @agent_enabled %>
 
   # Application Name Set this to be the name of your application as
   # you'd like it show up in New Relic. The service will then auto-map
@@ -45,33 +45,33 @@ common: &default_settings
   #       - Ajax Service
   #       - All Services
   #
-  app_name: <%= @ruby_agent_app_name %>
+  app_name: <%= @agent_app_name %>
 
   # When "true", the agent collects performance data about your
   # application and reports this data to the New Relic service at
   # newrelic.com. This global switch is normally overridden for each
   # environment below. (formerly called 'enabled')
-  monitor_mode: <%= @ruby_agent_monitor_mode %>
+  monitor_mode: <%= @agent_monitor_mode %>
 
   # Developer mode should be off in every environment but
   # development as it has very high overhead in memory.
-  developer_mode: <%= @ruby_agent_developer_mode %>
+  developer_mode: <%= @agent_developer_mode %>
 
   # The newrelic agent generates its own log file to keep its logging
   # information separate from that of your application. Specify its
   # log level here.
-  log_level: <%= @ruby_agent_log_level %>
+  log_level: <%= @agent_log_level %>
 
   # Optionally set the path to the log file This is expanded from the
   # root directory (may be relative or absolute, e.g. 'log/' or
   # '/var/log/') The agent will attempt to create this directory if it
   # does not exist.
   # log_file_path: 'log'
-  log_file_path: <%= @ruby_agent_logfile_path %>
+  log_file_path: <%= @agent_logfile_path %>
 
   # Optionally set the name of the log file, defaults to 'newrelic_agent.log'
   # log_file_name: 'newrelic_agent.log'
-  log_file_name: <%= @ruby_agent_logfile_name %>
+  log_file_name: <%= @agent_logfile_name %>
 
   # The newrelic agent communicates with the service via https by default.  This
   # prevents eavesdropping on the performance metrics transmitted by the agent.
@@ -79,7 +79,7 @@ common: &default_settings
   # which is performed asynchronously in a background thread.  If you'd prefer
   # to send your metrics over http uncomment the following line.
   # ssl: false
-  ssl: <%= @ruby_agent_ssl_enable %>
+  ssl: <%= @agent_ssl_enable %>
 
   #============================== Browser Monitoring ===============================
   # New Relic Real User Monitoring gives you insight into the performance real users are
@@ -89,7 +89,7 @@ common: &default_settings
   browser_monitoring:
       # By default the agent automatically injects the monitoring JavaScript
       # into web pages. Set this attribute to false to turn off this behavior.
-      auto_instrument: <%= @ruby_agent_browser_mon_auto_inst %>
+      auto_instrument: <%= @agent_browser_mon_auto_inst %>
 
   # Proxy settings for connecting to the New Relic server.
   #
@@ -100,16 +100,16 @@ common: &default_settings
   # proxy_port: 8080
   # proxy_user:
   # proxy_pass:
-  <%- if @ruby_agent_proxy_host -%>
-  proxy_host: <%= @ruby_agent_proxy_host %>
-    <%- if @ruby_agent_proxy_port -%>
-  proxy_port: <%= @ruby_agent_proxy_port %>
+  <%- if @agent_proxy_host -%>
+  proxy_host: <%= @agent_proxy_host %>
+    <%- if @agent_proxy_port -%>
+  proxy_port: <%= @agent_proxy_port %>
     <%- end -%>
-    <%- if @ruby_agent_proxy_user -%>
-  proxy_user: <%= @ruby_agent_proxy_user %>
+    <%- if @agent_proxy_user -%>
+  proxy_user: <%= @agent_proxy_user %>
     <%- end -%>
-    <%- if @ruby_agent_proxy_pass -%>
-  proxy_pass: <%= @ruby_agent_proxy_pass %>
+    <%- if @agent_proxy_pass -%>
+  proxy_pass: <%= @agent_proxy_pass %>
     <%- end -%>
   <%- end -%>
 
@@ -118,7 +118,7 @@ common: &default_settings
   # feature, change 'enabled' below to true.
   # See: https://newrelic.com/docs/ruby/audit-log
   audit_log:
-    enabled: <%= @ruby_agent_audit_log_enable %>
+    enabled: <%= @agent_audit_log_enable %>
 
   # Tells transaction tracer and error collector (when enabled)
   # whether or not to capture HTTP params.  When true, frameworks can
@@ -127,7 +127,7 @@ common: &default_settings
   # Java: create a config setting called "ignored_params" and set it to
   #     a comma separated list of HTTP parameter names.
   #     ex: ignored_params: credit_card, ssn, password
-  capture_params: <%= @ruby_agent_capture_params %>
+  capture_params: <%= @agent_capture_params %>
 
   # Transaction tracer captures deep information about slow
   # transactions and sends this to the New Relic service once a
@@ -138,7 +138,7 @@ common: &default_settings
     # Transaction tracer is enabled by default. Set this to false to
     # turn it off. This feature is only available at the Professional
     # and above product levels.
-    enabled: <%= @ruby_agent_trans_tracer_enable %>
+    enabled: <%= @agent_trans_tracer_enable %>
 
     # Threshold in seconds for when to collect a transaction
     # trace. When the response time of a controller action exceeds
@@ -146,30 +146,30 @@ common: &default_settings
     # New Relic. Valid values are any float value, or (default) "apdex_f",
     # which will use the threshold for an dissatisfying Apdex
     # controller action - four times the Apdex T value.
-    transaction_threshold: <%= @ruby_agent_trans_tracer_trans_threshold %>
+    transaction_threshold: <%= @agent_trans_tracer_trans_threshold %>
 
     # When transaction tracer is on, SQL statements can optionally be
     # recorded. The recorder has three modes, "off" which sends no
     # SQL, "raw" which sends the SQL statement in its original form,
     # and "obfuscated", which strips out numeric and string literals.
-    record_sql: <%= @ruby_agent_trans_tracer_record_sql %>
+    record_sql: <%= @agent_trans_tracer_record_sql %>
 
     # Threshold in seconds for when to collect stack trace for a SQL
     # call. In other words, when SQL statements exceed this threshold,
     # then capture and send to New Relic the current stack trace. This is
     # helpful for pinpointing where long SQL calls originate from.
-    stack_trace_threshold: <%= @ruby_agent_trans_tracer_stack_trace_threshold %>
+    stack_trace_threshold: <%= @agent_trans_tracer_stack_trace_threshold %>
 
     # Determines whether the agent will capture query plans for slow
     # SQL queries.  Only supported in mysql and postgres.  Should be
     # set to false when using other adapters.
     # explain_enabled: true
-    explain_enabled: <%= @ruby_agent_trans_tracer_explain_enabled %>
+    explain_enabled: <%= @agent_trans_tracer_explain_enabled %>
 
     # Threshold for query execution time below which query plans will
     # not be captured.  Relevant only when `explain_enabled` is true.
     # explain_threshold: 0.5
-    explain_threshold: <%= @ruby_agent_trans_tracer_explain_threshold %>
+    explain_threshold: <%= @agent_trans_tracer_explain_threshold %>
 
   # Error collector captures information about uncaught exceptions and
   # sends them to New Relic for viewing
@@ -178,24 +178,24 @@ common: &default_settings
     # Error collector is enabled by default. Set this to false to turn
     # it off. This feature is only available at the Professional and above
     # product levels.
-    enabled: <%= @ruby_agent_error_collector_enable %>
+    enabled: <%= @agent_error_collector_enable %>
 
     # Rails Only - tells error collector whether or not to capture a
     # source snippet around the place of the error when errors are View
     # related.
-    capture_source: <%= @ruby_agent_error_collector_capture_source %>
+    capture_source: <%= @agent_error_collector_capture_source %>
 
     # To stop specific errors from reporting to New Relic, set this property
     # to comma-separated values.  Default is to ignore routing errors,
     # which are how 404's get triggered.
-    ignore_errors: "<%= @ruby_agent_error_collector_ignore_errors -%>"
+    ignore_errors: "<%= @agent_error_collector_ignore_errors -%>"
 
   # If you're interested in capturing memcache keys as though they
   # were SQL uncomment this flag. Note that this does increase
   # overhead slightly on every memcached call, and can have security
   # implications if your memcached keys are sensitive
   # capture_memcache_keys: true
-    capture_memcache_keys: <%= @ruby_agent_error_collector_capture_memcache_keys %>
+    capture_memcache_keys: <%= @agent_error_collector_capture_memcache_keys %>
 
 # Application Environments
 # ------------------------------------------
@@ -207,7 +207,7 @@ common: &default_settings
 # NOTE if your application has other named environments, you should
 # provide newrelic configuration settings for these environments here.
 
-<% ruby_agent_environment_hash.sort.each do |key,config| -%>
+<% agent_environment_hash_real.sort.each do |key,config| -%>
 <%= key -%>:
   <<: *default_settings
 <% config.sort.each do |subkey,val| -%>
