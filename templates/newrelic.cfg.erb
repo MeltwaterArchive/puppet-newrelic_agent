@@ -3,16 +3,16 @@
 # Any local changes will be overwritten during the next puppet run
 #
 
-pidfile=<%= @php_daemon_pidfile %>
-logfile=<%= @php_daemon_logfile %>
-loglevel=<%= @php_daemon_loglevel %>
-port="<%= @php_daemon_port -%>"
-ssl=<%= @php_daemon_ssl %>
-<% if @php_daemon_proxy -%>
-proxy="<%= @php_daemon_proxy -%>"
+pidfile=<%= @daemon_pidfile %>
+logfile=<%= @daemon_logfile %>
+loglevel=<%= @daemon_loglevel %>
+port="<%= @daemon_port -%>"
+ssl=<%= @daemon_ssl %>
+<% if @daemon_proxy -%>
+proxy="<%= @daemon_proxy -%>"
 <% end -%>
-max_threads=<%= @php_daemon_max_threads %>
-collector_host="<%= @php_daemon_collector_host -%>"
-<% if @php_daemon_auditlog -%>
-auditlog="<%= @php_daemon_auditlog -%>"
+max_threads=<%= @daemon_max_threads %>
+collector_host="<%= @daemon_collector_host -%>"
+<% if @daemon_auditlog -%>
+auditlog="<%= @daemon_auditlog -%>"
 <% end -%>

@@ -1,5 +1,5 @@
 name    'meltwater-newrelic_agent'
-version '0.2.1'
+version '0.2.5'
 source 'git@github.com:meltwater/puppet-newrelic_agent.git'
 author 'Meltwater Group'
 license 'Apache License, Version 2.0'

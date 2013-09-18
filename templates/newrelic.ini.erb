@@ -10,57 +10,57 @@
 extension=newrelic.so
 
 [newrelic]
-newrelic.enabled=<%= @php_agent_enable %>
+newrelic.enabled=<%= @agent_enable %>
 newrelic.license = "<%= @newrelic_license_key -%>"
-newrelic.logfile = "<%= @php_agent_logfile -%>"
-newrelic.loglevel = "<%= @php_agent_loglevel -%>"
-newrelic.appname = "<%= @php_agent_appname -%>"
+newrelic.logfile = "<%= @agent_logfile -%>"
+newrelic.loglevel = "<%= @agent_loglevel -%>"
+newrelic.appname = "<%= @agent_appname -%>"
 
-<% if @php_daemon_agent_startup -%>
-newrelic.daemon.logfile = "<%= @php_daemon_logfile -%>"
-newrelic.daemon.loglevel = "<%= @php_daemon_loglevel -%>"
-newrelic.daemon.max_threads = <%= @php_daemon_max_threads %>
-newrelic.daemon.ssl = <%= @php_daemon_ssl %>
-<% if @php_daemon_proxy -%>
-newrelic.daemon.proxy = "<%= @php_daemon_proxy -%>"
+<% if @daemon_agent_startup -%>
+newrelic.daemon.logfile = "<%= @daemon_logfile -%>"
+newrelic.daemon.loglevel = "<%= @daemon_loglevel -%>"
+newrelic.daemon.max_threads = <%= @daemon_max_threads %>
+newrelic.daemon.ssl = <%= @daemon_ssl %>
+<% if @daemon_proxy -%>
+newrelic.daemon.proxy = "<%= @daemon_proxy -%>"
 <% end -%>
-newrelic.daemon.pidfile = "<%= @php_daemon_pidfile -%>"
-newrelic.daemon.location = "<%= @php_daemon_location -%>"
-newrelic.daemon.collector_host = "<%= @php_daemon_collector_host -%>"
-<% if @php_daemon_auditlog -%>
-newrelic.daemon.auditlog = "<%= @php_daemon_auditlog -%>"
+newrelic.daemon.pidfile = "<%= @daemon_pidfile -%>"
+newrelic.daemon.location = "<%= @daemon_location -%>"
+newrelic.daemon.collector_host = "<%= @daemon_collector_host -%>"
+<% if @daemon_auditlog -%>
+newrelic.daemon.auditlog = "<%= @daemon_auditlog -%>"
 <% end -%>
 newrelic.daemon.dont_launch = 0
 <% else -%>
 newrelic.daemon.dont_launch = 3
 <% end -%>
-newrelic.daemon.port = "<%= @php_daemon_port -%>"
+newrelic.daemon.port = "<%= @daemon_port -%>"
 
-newrelic.capture_params = <%= @php_agent_capture_params %>
-<% if @php_agent_ignored_params -%>
-newrelic.ignored_params = "<%= @php_agent_ignored_params -%>"
+newrelic.capture_params = <%= @agent_capture_params %>
+<% if @agent_ignored_params -%>
+newrelic.ignored_params = "<%= @agent_ignored_params -%>"
 <% end -%>
-newrelic.error_collector.enabled = <%= @php_agent_error_collector_enable %>
-newrelic.error_collector.record_database_errors = <%= @php_agent_error_collector_record_database_errors %>
-newrelic.error_collector.prioritize_api_errors = <%= @php_agent_error_collector_pri_api %>
-newrelic.browser_monitoring.auto_instrument = <%= @php_agent_browser_mon_auto_inst %>
-newrelic.transaction_tracer.enabled = <%= @php_agent_transaction_tracer_enable %>
-newrelic.transaction_tracer.threshold = "<%= @php_agent_transaction_tracer_threshold -%>"
-newrelic.transaction_tracer.detail = <%= @php_agent_transaction_tracer_detail -%>
-newrelic.transaction_tracer.slow_sql = <%= @php_agent_transaction_tracer_slow_sql %>
-newrelic.transaction_tracer.stack_trace_threshold = <%= @php_agent_transaction_tracer_stack_trace_threshold %>
-newrelic.transaction_tracer.explain_enabled = <%= @php_agent_transaction_tracer_explain_enabled %>
-newrelic.transaction_tracer.explain_threshold = <%= @php_agent_transaction_tracer_explain_threshold %>
-newrelic.transaction_tracer.record_sql = "<%= @php_agent_transaction_tracer_record_sql -%>"
-<% if @php_agent_transaction_tracer_custom -%>
-newrelic.transaction_tracer.custom = "<%= @php_agent_transaction_tracer_custom -%>"
+newrelic.error_collector.enabled = <%= @agent_error_collector_enable %>
+newrelic.error_collector.record_database_errors = <%= @agent_error_collector_record_database_errors %>
+newrelic.error_collector.prioritize_api_errors = <%= @agent_error_collector_pri_api %>
+newrelic.browser_monitoring.auto_instrument = <%= @agent_browser_mon_auto_inst %>
+newrelic.transaction_tracer.enabled = <%= @agent_transaction_tracer_enable %>
+newrelic.transaction_tracer.threshold = "<%= @agent_transaction_tracer_threshold -%>"
+newrelic.transaction_tracer.detail = <%= @agent_transaction_tracer_detail -%>
+newrelic.transaction_tracer.slow_sql = <%= @agent_transaction_tracer_slow_sql %>
+newrelic.transaction_tracer.stack_trace_threshold = <%= @agent_transaction_tracer_stack_trace_threshold %>
+newrelic.transaction_tracer.explain_enabled = <%= @agent_transaction_tracer_explain_enabled %>
+newrelic.transaction_tracer.explain_threshold = <%= @agent_transaction_tracer_explain_threshold %>
+newrelic.transaction_tracer.record_sql = "<%= @agent_transaction_tracer_record_sql -%>"
+<% if @agent_transaction_tracer_custom -%>
+newrelic.transaction_tracer.custom = "<%= @agent_transaction_tracer_custom -%>"
 <% end -%>
-newrelic.framework = "<%= @php_agent_framework -%>"
-newrelic.webtransaction.name.remove_trailing_path = <%= @php_agent_webtransaction_name_remove_trailing_path %>
-<% if @php_agent_webtransaction_name_functions -%>
-newrelic.webtransaction.name.functions = "<%= @php_agent_webtransaction_name_functions -%>"
+newrelic.framework = "<%= @agent_framework -%>"
+newrelic.webtransaction.name.remove_trailing_path = <%= @agent_webtransaction_name_remove_trailing_path %>
+<% if @agent_webtransaction_name_functions -%>
+newrelic.webtransaction.name.functions = "<%= @agent_webtransaction_name_functions -%>"
 <% end -%>
-<% if @php_agent_webtransaction_name_files -%>
-newrelic.webtransaction.name.files = "<%= @php_agent_webtransaction_name_files -%>"
+<% if @agent_webtransaction_name_files -%>
+newrelic.webtransaction.name.files = "<%= @agent_webtransaction_name_files -%>"
 <% end -%>
 
