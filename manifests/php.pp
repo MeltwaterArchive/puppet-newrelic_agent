@@ -90,7 +90,7 @@ class newrelic_agent::php (
   $agent_error_collector_pri_api = false,
   $agent_framework = '',
   $agent_ignored_params = undef,
-  $agent_logfile = '/var/log/newrelic/agent.log',
+  $agent_logfile = '/var/log/newrelic/php_agent.log',
   $agent_loglevel = 'info',
   $agent_transaction_tracer_enable = true,
   $agent_transaction_tracer_threshold = 'apdex_f',
