@@ -7,8 +7,8 @@
 # === Parameters
 #
 # [*config_path*] (Required)
-#   This is the fill path of where Puppet is to put the newrelic.yml
-#   config file for your Ruby application.
+#   This is the full path of where Puppet is to put the newrelic.yml
+#   configuration file for your Ruby application.
 #
 # [*config_owner*]
 #   This sets the owner of the configuration file, default is 'root'.
@@ -20,23 +20,70 @@
 #   This sets the file permissions of the configuration file, default is '0644'.
 #
 # [*install_gem*]
-#   This controls whether or not to install the NewRelic agent gem directly
-#   Or if you want to manage its installation with bundler in your Ruby Application
+#   This controls whether or not to install the NewRelic agent gem directly.  The
+#   default is 'true', which uses Puppet's gem provider to install the gem.
+#   Set this to 'false' if you use bundler in your Ruby Application to install the
+#   gem.
 #
 # [*notify_service*]
 #   (Optional) If you have a service that you're managing elsewhere with Puppet, putting
 #   the name of that service (ie: nginx) in this parameter will trigger a refresh
 #   notification to that service if the newrelic.yaml file changes.
 #
+# [*agent_environment_hash*]
+#   This is a puppet hash to configure any custom per-environment settings for the agent.
+#   It has the format of:
+#
+#    agent_environment_hash => {
+#      '<environment>' => {
+#        '<setting_1>' => <value>,
+#        '<setting_2>' => <value2>,
+#      },
+#    }
+#
+#
 # === Settings
 #
 # Please refer to the NewRelic Ruby Agent documentation for what each of the following
 # settings control:  https://newrelic.com/docs/ruby/ruby-agent-configuration
 #
-# This just lists the parameter and which setting it controls.  The settings use the
-# defaults from NewRelic:
+# This just lists the parameter and which setting it controls in the newrelic.yaml file.
+# The default values for each parameter are the defaults from NewRelic:
+#
+#  $agent_enabled => agent_enabled
+#  $agent_app_name => app_name
+#  $agent_audit_log_enable => audit_log::enabled
+#  $agent_browser_mon_auto_inst => browser_monitoring::auto_instrument
+#  $agent_capture_params => capture_params
+#  $agent_developer_mode => developer_mode
+#  $agent_error_collector_enable => error_collector::enabled
+#  $agent_error_collector_capture_source => error_collector::capture_source
+#  $agent_error_collector_ignore_errors => error_collector::ignore_errors
+#  $agent_error_collector_capture_memcache_keys => error_collector::capture_memcache_keys
+#  $agent_log_level => log_level
+#  $agent_logfile_name => log_file_name
+#  $agent_logfile_path => log_file_path
+#  $agent_monitor_mode => monitor_mode
+#  $agent_proxy_host => proxy_host
+#  $agent_proxy_port => proxy_port
+#  $agent_proxy_user => proxy_user
+#  $agent_proxy_pass => proxy_pass
+#  $agent_ssl_enable => ssl
+#  $agent_trans_tracer_enable => transaction_tracer::enabled
+#  $agent_trans_tracer_trans_threshold => transaction_tracer::transaction_threshold
+#  $agent_trans_tracer_record_sql => transaction_tracer::record_sql
+#  $agent_trans_tracer_stack_trace_threshold => transaction_tracer::stack_trace_threshold
+#  $agent_trans_tracer_explain_enabled => transaction_tracer::explain_enabled
+#  $agent_trans_tracer_explain_threshold => transaction_tracer::explain_threshold
 #
 # === Examples
+# To just do a basic installation of the New relic agent, you can do the following,
+# it will setup the Ruby agent using the default settings with a custom application
+# name:
+#
+#  class { 'newrelic_agent::ruby':
+#    agent_appname  => 'My Ruby App',
+#  }
 #
 class newrelic_agent::ruby (
   $config_path,
