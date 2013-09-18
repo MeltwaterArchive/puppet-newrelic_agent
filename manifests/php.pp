@@ -73,8 +73,8 @@
 # to reload:
 #
 #  class { 'newrelic_agent::php':
-#    agent_appname => 'My PHP Application',
-#    notify_service    => 'httpd',
+#    agent_appname  => 'My PHP Application',
+#    notify_service => 'httpd',
 #  }
 #
 class newrelic_agent::php (
