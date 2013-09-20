@@ -122,6 +122,8 @@ class newrelic_agent::php (
     fail('You must include the newrelic_agent base class before adding any other monitoring agents')
   }
 
+  Class['newrelic_agent'] -> Class['newrelic_agent::php']
+
   #Get license key from main class
   $newrelic_license_key = $::newrelic_agent::newrelic_license_key
 

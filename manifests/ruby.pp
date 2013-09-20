@@ -125,6 +125,8 @@ class newrelic_agent::ruby (
     fail('You must include the newrelic_agent base class before adding any other monitoring agents')
   }
 
+  Class['newrelic_agent'] -> Class['newrelic_agent::ruby']
+
   validate_absolute_path($config_path)
 
   #Get license key from main class
