@@ -8,4 +8,4 @@ description 'NewRelic Agent module'
 project_page 'https://github.com/meltwater/puppet-newrelic_agent'
 
 ## Add dependencies, if any:
-dependency 'puppetlabs-stdlib', '>= 4.1.0'
+dependency 'puppetlabs/stdlib', '>= 4.1.0'
