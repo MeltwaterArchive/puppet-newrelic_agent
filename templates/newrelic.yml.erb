@@ -67,11 +67,11 @@ common: &default_settings
   # '/var/log/') The agent will attempt to create this directory if it
   # does not exist.
   # log_file_path: 'log'
-  log_file_path: <%= @agent_logfile_path %>
+  log_file_path: '<%= @agent_logfile_path %>'
 
   # Optionally set the name of the log file, defaults to 'newrelic_agent.log'
   # log_file_name: 'newrelic_agent.log'
-  log_file_name: <%= @agent_logfile_name %>
+  log_file_name: '<%= @agent_logfile_name %>'
 
   # The newrelic agent communicates with the service via https by default.  This
   # prevents eavesdropping on the performance metrics transmitted by the agent.
