@@ -105,7 +105,7 @@ class newrelic_agent::ruby (
   $agent_error_collector_capture_memcache_keys = false,
   $agent_log_level = 'info',
   $agent_logfile_name = 'newrelic_agent.log',
-  $agent_logfile_path = '/var/log',
+  $agent_logfile_path = 'log',
   $agent_monitor_mode = true,
   $agent_proxy_host = undef,
   $agent_proxy_port = undef,
