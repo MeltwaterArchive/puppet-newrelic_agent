@@ -86,7 +86,7 @@
 #  }
 #
 class newrelic_agent::ruby (
-  $config_path,
+  $config_path = 'UNSET',
   $config_owner = 'root',
   $config_group = 'root',
   $config_mode = '0644',
@@ -125,6 +125,9 @@ class newrelic_agent::ruby (
     fail('You must include the newrelic_agent base class before adding any other monitoring agents')
   }
 
+  if $config_path == 'UNSET' {
+    fail("You must provide a value for the config_path for the ${module_name} module'")
+  }
   Class['newrelic_agent'] -> Class['newrelic_agent::ruby']
 
   validate_absolute_path($config_path)
