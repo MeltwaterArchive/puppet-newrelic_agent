@@ -79,7 +79,7 @@
 # Licensed under Apache License, Version 2.0
 #
 class newrelic_agent (
-  $newrelic_license_key = 'UNSET',
+  $newrelic_license_key = undef,
   $sysmond_pkg = 'newrelic-sysmond',
   $sysmond_pkg_ensure = 'present',
   $sysmond_collector_host = 'collector.newrelic.com',
@@ -101,7 +101,7 @@ class newrelic_agent (
   $sysmond_svc = 'newrelic-sysmond'
   $sysmond_cfg = '/etc/newrelic/nrsysmond.cfg'
 
-  if $newrelic_license_key == 'UNSET' {
+  if  !($newrelic_license_key) {
     fail("You must provide a NewRelic license key for the ${module_name} module")
   }
 
