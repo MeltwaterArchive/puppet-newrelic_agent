@@ -12,8 +12,8 @@ All of the sub-classes to this module have a depenency of the main class to set 
 
 A simple installation of this module would consist of the following:
 
-  class { newrelic_agent:
-    newrelic_license_key => 'abc123xyz',
+    class { newrelic_agent:
+      newrelic_license_key => 'abc123xyz',
     }
 
     class { 'newrelic_agent::php':
