@@ -110,7 +110,12 @@ class newrelic_agent (
     'RedHat' : {
       #Repo configuration
       $newrelic_repo_pkg = 'newrelic-repo-5-3.noarch'
-      $newrelic_repo_src = "https://yum.newrelic.com/pub/newrelic/el5/x86_64/${newrelic_repo_pkg}.rpm"
+
+      #RPM in CentOS doesn't support https transfers.
+      case $::operatingsystemmajrelease {
+        '5' : { $newrelic_repo_src = "http://yum.newrelic.com/pub/newrelic/el5/x86_64/${newrelic_repo_pkg}.rpm" }
+        default : { $newrelic_repo_src = "https://yum.newrelic.com/pub/newrelic/el5/x86_64/${newrelic_repo_pkg}.rpm" }
+      }
 
       package { $newrelic_repo_pkg :
         ensure   => 'present',
