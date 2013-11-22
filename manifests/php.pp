@@ -118,10 +118,7 @@ class newrelic_agent::php (
   $daemon_ssl = true,
   $daemon_svc_enable = true,
   ) {
-  if ! defined(Class['newrelic_agent']) {
-    fail('You must include the newrelic_agent base class before adding any other monitoring agents')
-  }
-
+  #Resource ordering, this module depends on the main newrelic_agent class.
   Class['newrelic_agent'] -> Class['newrelic_agent::php']
 
   #Get license key from main class

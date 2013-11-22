@@ -121,14 +121,12 @@ class newrelic_agent::ruby (
   #Environment Hash
   $agent_environment_hash = 'UNSET',
 ) {
-  if ! defined(Class['newrelic_agent']) {
-    fail('You must include the newrelic_agent base class before adding any other monitoring agents')
-  }
+  #Resource ordering, this module depends on the main newrelic_agent class.
+  Class['newrelic_agent'] -> Class['newrelic_agent::ruby']
 
   if $config_path == 'UNSET' {
     fail("You must provide a value for the config_path for the ${module_name} module'")
   }
-  Class['newrelic_agent'] -> Class['newrelic_agent::ruby']
 
   validate_absolute_path($config_path)
 
