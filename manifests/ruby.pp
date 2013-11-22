@@ -86,7 +86,7 @@
 #  }
 #
 class newrelic_agent::ruby (
-  $config_path = 'UNSET',
+  $config_path = undef,
   $config_owner = 'root',
   $config_group = 'root',
   $config_mode = '0644',
@@ -119,13 +119,13 @@ class newrelic_agent::ruby (
   $agent_trans_tracer_explain_enabled = true,
   $agent_trans_tracer_explain_threshold = '0.5',
   #Environment Hash
-  $agent_environment_hash = 'UNSET',
+  $agent_environment_hash = undef,
 ) {
   #Resource ordering, this module depends on the main newrelic_agent class.
   Class['newrelic_agent'] -> Class['newrelic_agent::ruby']
 
-  if $config_path == 'UNSET' {
-    fail("You must provide a value for the config_path for the ${module_name} module'")
+  if !($config_path) {
+    fail("You must provide a value for '\$config_path' in the ${module_name} module")
   }
 
   validate_absolute_path($config_path)
@@ -133,7 +133,7 @@ class newrelic_agent::ruby (
   #Get license key from main class
   $newrelic_license_key = $::newrelic_agent::newrelic_license_key
 
-  if $agent_environment_hash == 'UNSET' {
+  if !($agent_environment_hash) {
     $agent_environment_hash_real = {
       'development' => {
         'monitor_mode'   => false,
