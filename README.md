@@ -12,14 +12,14 @@ All of the sub-classes to this module have a depenency of the main class to set 
 
 A simple installation of this module would consist of the following:
 
-class { newrelic_agent:
-  newrelic_license_key => 'abc123xyz',
-}
+  class { newrelic_agent:
+    newrelic_license_key => 'abc123xyz',
+    }
 
-class { 'newrelic_agent::php':
-  php_agent_appname => 'My PHP Application',
-  notify_service    => 'httpd',
-}
+    class { 'newrelic_agent::php':
+      php_agent_appname => 'My PHP Application',
+      notify_service    => 'httpd',
+    }
 
 This will setup the sysmond agent in the main class for hardware monitoring, then install the PHP agent for NewRelic and then notify the httpd service to reload to initialize the monitoring agent.
 
