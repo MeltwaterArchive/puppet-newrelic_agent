@@ -24,6 +24,13 @@
 #   the name of that service (ie: httpd) in this parameter will trigger a refresh
 #   notification to that service if the newrelic.ini file changes.
 #
+# [*manage_pkg*]
+#   Allow for overriding the package management of this module.
+#
+# [*php_conf_dir*]
+#   This parameter allows for the manual setting of the php.d configuration directory
+#   In the event that this module does not provide the correct one for your environment.
+#
 # === Settings
 #
 # Please refer to the NewRelic PHP Agent documentation for what each of the following
@@ -79,7 +86,10 @@
 #
 class newrelic_agent::php (
   $notify_service = undef,
+  $php_conf_dir = undef,
+  $manage_pkg = $::newrelic_agent::manage_pkg,
   #PHP Agent Parameters
+  $agent_pkg = 'newrelic-php5',
   $agent_pkg_ensure = 'present',
   $agent_appname = 'PHP Application',
   $agent_browser_mon_auto_inst = true,
@@ -116,29 +126,36 @@ class newrelic_agent::php (
   $daemon_port = '/tmp/.newrelic.sock',
   $daemon_proxy = undef,
   $daemon_ssl = true,
+  $daemon_svc = 'newrelic-daemon',
   $daemon_svc_enable = true,
-  ) {
+) {
+  validate_bool($manage_pkg)
+
   #Resource ordering, this module depends on the main newrelic_agent class.
   Class['newrelic_agent'] -> Class['newrelic_agent::php']
 
   #Get license key from main class
   $newrelic_license_key = $::newrelic_agent::newrelic_license_key
 
-  $agent_pkg = 'newrelic-php5'
-  $daemon_svc = 'newrelic-daemon'
-
-  case $::osfamily {
-    'RedHat' : {
-      #PHP Agent Parameters
-      $agent_conf_dir = '/etc/php.d'
-    }
-    default : {
-      fail ("Unsupported osfamily: ${::osfamily} for module: ${module_name}")
+  if $php_conf_dir {
+    validate_absolute_path($php_conf_dir)
+    $agent_conf_dir = $php_conf_dir
+  } else {
+    case $::osfamily {
+      'RedHat' : {
+        $agent_conf_dir = '/etc/php.d'
+      }
+      default : {
+        $agent_conf_dir = '/etc/php.d'
+      }
     }
   }
 
-  package { $agent_pkg:
-    ensure => $agent_pkg_ensure,
+  if $manage_pkg {
+    package { $agent_pkg:
+      ensure => $agent_pkg_ensure,
+      before => Exec['newrelic-install'],
+    }
   }
 
   if $agent_pkg_ensure != 'absent' {
@@ -148,7 +165,6 @@ class newrelic_agent::php (
       user        => 'root',
       group       => 'root',
       unless      => "grep ${newrelic_license_key} ${agent_conf_dir}/newrelic.ini",
-      require     => Package[$agent_pkg],
     }
 
     if $daemon_agent_startup == true {

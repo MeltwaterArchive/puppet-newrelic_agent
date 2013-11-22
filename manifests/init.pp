@@ -4,6 +4,12 @@
 #
 # === Parameters
 #
+# [*manage_pkg*]
+#   Allow for overriding the package management of this module.
+#
+# [*manage_repo*]
+#   Allow for overriding the repo management of this module.
+#
 # [*sysmond_pkg*]
 #   This is the name of the package for the NewRelic system monitoring daemon.
 #
@@ -80,6 +86,8 @@
 #
 class newrelic_agent (
   $newrelic_license_key = undef,
+  $manage_pkg = true,
+  $manage_repo = true,
   $sysmond_pkg = 'newrelic-sysmond',
   $sysmond_pkg_ensure = 'present',
   $sysmond_collector_host = 'collector.newrelic.com',
@@ -97,41 +105,51 @@ class newrelic_agent (
   validate_string($sysmond_pkg)
   validate_string($sysmond_pkg_ensure)
   validate_bool($sysmond_svc_enable)
+  validate_bool($manage_pkg)
+  validate_bool($manage_repo)
 
   $sysmond_svc = 'newrelic-sysmond'
   $sysmond_cfg = '/etc/newrelic/nrsysmond.cfg'
 
-  if  !($newrelic_license_key) {
+  if !($newrelic_license_key) {
     fail("You must provide a NewRelic license key for the ${module_name} module")
   }
 
   #Install the Newrelic repo
-  case $::osfamily {
-    'RedHat' : {
-      #Repo configuration
-      $newrelic_repo_pkg = 'newrelic-repo-5-3.noarch'
+  if $manage_repo {
+    case $::osfamily {
+      'RedHat' : {
+        #Repo configuration
+        $newrelic_repo_pkg = 'newrelic-repo-5-3.noarch'
 
-      #RPM in CentOS doesn't support https transfers.
-      case $::operatingsystemmajrelease {
-        '5' : { $newrelic_repo_src = "http://yum.newrelic.com/pub/newrelic/el5/x86_64/${newrelic_repo_pkg}.rpm" }
-        default : { $newrelic_repo_src = "https://yum.newrelic.com/pub/newrelic/el5/x86_64/${newrelic_repo_pkg}.rpm" }
-      }
+        #RPM in CentOS 5 doesn't support https transfers.
+        case $::operatingsystemmajrelease {
+          '5' : { $newrelic_repo_src = "http://yum.newrelic.com/pub/newrelic/el5/x86_64/${newrelic_repo_pkg}.rpm" }
+          default : { $newrelic_repo_src = "https://yum.newrelic.com/pub/newrelic/el5/x86_64/${newrelic_repo_pkg}.rpm" }
+        }
 
-      package { $newrelic_repo_pkg :
-        ensure   => 'present',
-        provider => 'rpm',
-        source   => $newrelic_repo_src,
-        before   => Package[$sysmond_pkg],
+        package { $newrelic_repo_pkg:
+          ensure   => 'present',
+          provider => 'rpm',
+          source   => $newrelic_repo_src,
+        }
+
+        if $manage_pkg {
+          Package[$newrelic_repo_pkg] -> Package[$sysmond_pkg]
+        }
       }
-    }
-    default : {
-      fail ("Unsupported osfamily: ${::osfamily} for module: ${module_name}")
+      default : {
+        fail("Unsupported osfamily: ${::osfamily} for module: ${module_name}")
+      }
     }
   }
 
   #Manage the sysmond package and service
-  package { $sysmond_pkg:
-    ensure => $sysmond_pkg_ensure,
+  if $manage_pkg {
+    package { $sysmond_pkg:
+      ensure => $sysmond_pkg_ensure,
+      before => [Service[$sysmond_svc], File[$sysmond_cfg]],
+    }
   }
 
   if $sysmond_svc_enable {
@@ -147,12 +165,11 @@ class newrelic_agent (
       group   => 'newrelic',
       mode    => '0640',
       content => template("${module_name}/nrsysmond.cfg.erb"),
-      require => Package[$sysmond_pkg],
     }
     service { $sysmond_svc:
       ensure    => $sysmond_svc_ensure,
       enable    => $sysmond_svc_enable,
-      require   => [File[$sysmond_cfg], Package[$sysmond_pkg]],
+      require   => File[$sysmond_cfg],
       subscribe => File[$sysmond_cfg],
     }
   }
