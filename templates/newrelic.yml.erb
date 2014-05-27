@@ -207,7 +207,7 @@ common: &default_settings
 # NOTE if your application has other named environments, you should
 # provide newrelic configuration settings for these environments here.
 
-<% agent_environment_hash_real.sort.each do |key,config| -%>
+<% @agent_environment_hash_real.sort.each do |key,config| -%>
 <%= key -%>:
   <<: *default_settings
 <% config.sort.each do |subkey,val| -%>
