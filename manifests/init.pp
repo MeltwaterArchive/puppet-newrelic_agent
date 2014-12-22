@@ -21,6 +21,10 @@
 #   This controls the state of system monitoring daemon service, defaults
 #   to 'true'.  Can be to 'false' to stop and disable the service.
 #
+# [*sysmond_labels*]
+#   Array for labels to apply to the host in NewRelic.  Each label is a
+#   label_type/label_value pair, with each item separated by a colon.
+#
 # [*sysmond_loglevel*]
 #   Level of detail you want in the sysmond log file, default is 'info'.
 #   See the NewRelic sysmond documentation for the valid options.
@@ -91,6 +95,7 @@ class newrelic_agent (
   $sysmond_pkg = 'newrelic-sysmond',
   $sysmond_pkg_ensure = 'present',
   $sysmond_collector_host = 'collector.newrelic.com',
+  $sysmond_labels = undef,
   $sysmond_logfile = '/var/log/newrelic/nrsysmond.log',
   $sysmond_loglevel = 'info',
   $sysmond_pidfile = '/var/run/newrelic/nrsysmond.pid',
@@ -107,6 +112,7 @@ class newrelic_agent (
   validate_bool($sysmond_svc_enable)
   validate_bool($manage_pkg)
   validate_bool($manage_repo)
+  validate_array($sysmond_labels)
 
   $sysmond_svc = 'newrelic-sysmond'
   $sysmond_cfg = '/etc/newrelic/nrsysmond.cfg'
