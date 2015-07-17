@@ -1,0 +1,29 @@
+  mongodb:
+    name: <%= "#{@name}" %>
+    host: <%= "#{@host}" %>
+    port: <%= "#{@port}" %>
+    ssl: <%= "#{@ssl}" %>
+<% if @admin_username -%>
+<%= "    admin_username: #{@admin_username}" %>
+<% end -%>
+<% if @admin_password -%>
+<%= "    admin_password: #{@admin_password}" %>
+<% end -%>
+<% if @ssl_cert_reqs != '0' -%>
+<%= "    ssl_keyfile: #{@ssl_keyfile}" %>
+<% end -%>
+<% if @ssl_cert_reqs != '0' -%>
+<%= "    ssl_certfile: #{@ssl_certfile}" %>
+<% end -%>
+<% if @ssl_cert_reqs != '0' -%>
+<%= "    port: #{@ssl_cert_reqs}" %>
+<% end -%>
+<% if @ssl_cert_reqs != '0' -%>
+<%= "    ssl_ca_certs: #{@ssl_ca_certs}" %>
+<% end -%>
+<% if @databases -%>
+<%= "    databases:" %>
+<% [@databases].flatten.compact.each do |database| -%>
+<%= "      - #{database}" %>
+<% end -%>
+<% end -%>
