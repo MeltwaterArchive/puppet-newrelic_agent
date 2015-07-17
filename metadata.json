@@ -1,0 +1,20 @@
+{
+  "name": "meltwater-newrelic_agent",
+  "version": "0.3.0",
+  "author": "Meltwater Group",
+  "summary": "Puppet module for installing and managing the NewRelic agents",
+  "license": "Apache 2.0",
+  "source": "git@github.com:meltwater/puppet-newrelic_agent.git",
+  "project_page": "https://github.com/meltwater/puppet-newrelic_agent",
+  "issues_url": "https://github.com/meltwater/puppet-newrelic_agent/issues",
+  "dependencies": [
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 4.1.0"
+    },
+    {
+      "name": "puppetlabs/concat",
+      "version_requirement": "0.2.0"
+    }
+  ]
+}
