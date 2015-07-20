@@ -1,0 +1,10 @@
+%YAML 1.2
+---
+Application:
+  license_key: <%= "#{@license_key}" %>
+  wake_interval: <%= "#{@wake_interval}" %>
+  newrelic_api_timeout: <%= "#{@newrelic_api_timeout}" %>
+<% if @proxy -%>
+<%= "  proxy: #{@proxy}" %>
+<% end -%>
+
