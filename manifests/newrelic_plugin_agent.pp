@@ -1,4 +1,4 @@
-# This manages the newrelic-plugin-agent process from 
+# This manages the newrelic-plugin-agent process from
 # https://github.com/MeetMe/newrelic-plugin-agent
 #
 # Requires the main newrelic_agent class to provide the license key
