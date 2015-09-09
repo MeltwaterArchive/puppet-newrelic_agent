@@ -139,3 +139,14 @@ collector_host=<%= @sysmond_collector_host %>
 #
 #timeout=30
 timeout=<%= @sysmond_timeout %>
+
+#
+# Option : labels
+# Value  : A dictionary of label names and values for categories that will be
+#          applied to the data sent from this agent. This may also be expressed
+#          as a semicolon delimited string of colon-separated pairs.
+#          #For example: labels=Server:One;Data Center:Primary;
+# Default: ""
+<% if @sysmond_labels -%>
+labels=<%= @sysmond_labels.join(';') %>;
+<% end -%>

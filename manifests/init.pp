@@ -65,6 +65,9 @@
 #   This is the license key for your NewRelic account and must be provided for
 #   this module to work.
 #
+# [*sysmond_labels*]
+#   Array of labels to apply to the machine
+#
 # === Examples
 #
 #  This will install the newrelic sysmond agent using the default settings and
@@ -100,6 +103,7 @@ class newrelic_agent (
   $sysmond_ssl_ca_bundle = undef,
   $sysmond_ssl_ca_path = undef,
   $sysmond_timeout = '30',
+  $sysmond_labels = undef,
 ) {
   validate_string($newrelic_license_key)
   validate_string($sysmond_pkg)
