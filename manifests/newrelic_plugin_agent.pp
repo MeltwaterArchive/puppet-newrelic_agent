@@ -69,7 +69,7 @@ class newrelic_agent::newrelic_plugin_agent (
   }
 
   if ($manage_pkg) {
-    package { 'newrelic-plugin-agent':
+    package { 'newrelic_plugin_agent':
       ensure   => $version,
       provider => 'pip',
       require  => Package['python-pip'],
