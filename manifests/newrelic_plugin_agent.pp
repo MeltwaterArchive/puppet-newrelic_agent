@@ -86,7 +86,7 @@ class newrelic_agent::newrelic_plugin_agent (
       ensure  => $service_ensure,
       enable  => true,
       require => [
-        Package['newrelic-plugin-agent'],
+        Package['newrelic_plugin_agent'],
         File['/etc/init.d/newrelic-plugin-agent'],
         Concat['/etc/newrelic/newrelic-plugin-agent.cfg'],
       ],
