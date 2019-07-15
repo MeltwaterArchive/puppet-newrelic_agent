@@ -1,3 +1,6 @@
+# DEPRECATED
+This repository and project are no longer maintained.
+
 puppet-newrelic_agent
 =====================
 
